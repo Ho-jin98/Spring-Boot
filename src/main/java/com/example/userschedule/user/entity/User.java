@@ -16,11 +16,13 @@ public class User extends BaseTimeEntity {
     private Long id;
     private String username;
     private String email;
+    private String password;
 
 
-    public User(String username, String email) {
+    public User(String username, String email,  String password) {
         this.username = username;
         this.email = email;
+        this.password = password;
     }
 
     public void update(String username, String email) {

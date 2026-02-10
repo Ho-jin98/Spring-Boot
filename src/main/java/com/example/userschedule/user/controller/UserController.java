@@ -2,6 +2,8 @@ package com.example.userschedule.user.controller;
 
 import com.example.userschedule.user.dto.*;
 import com.example.userschedule.user.service.UserService;
+import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,17 @@ import java.util.List;
 public class UserController {
     private  final UserService userService;
 
-    @PostMapping("/users")
-    public ResponseEntity<CreateUserResponse> createUser(@RequestBody CreateUserRequest request){
+    //TODO 회원가입, 유저 등록 = 회원가입이니까!
+    @PostMapping("/signup")
+    public ResponseEntity<SignupResponse> signup(@Valid @RequestBody SignupRequest request){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.save(request));
+    }
+    //TODO 로그인
+    @PostMapping("/login")
+    public ResponseEntity<Void> login(@Valid @RequestBody LoginRequest request, HttpSession session){
+        SessionUser sessionUser = userService.login(request);
+        session.setAttribute("loginUser", sessionUser);
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     @GetMapping("/users")

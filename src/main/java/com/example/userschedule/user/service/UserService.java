@@ -2,6 +2,7 @@ package com.example.userschedule.user.service;
 import com.example.userschedule.user.dto.*;
 import com.example.userschedule.user.entity.User;
 import com.example.userschedule.user.repository.UserRepository;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +14,11 @@ public class UserService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CreateUserResponse save(CreateUserRequest request){
-        User user = new User(request.getUsername(),request.getEmail());
+    public SignupResponse save(SignupRequest request){
+        User user = new User(request.getUsername(),request.getEmail(),request.getPassword());
         User savedUser = userRepository.save(user);
 
-        return new CreateUserResponse(
+        return new SignupResponse(
                 savedUser.getId(),
                 savedUser.getUsername(),
                 savedUser.getEmail(),
@@ -80,5 +81,18 @@ public class UserService {
             throw new IllegalStateException("없는 유저입니다.");
         }
         userRepository.deleteById(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public SessionUser login(@Valid  LoginRequest request) {
+        User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
+                () -> new IllegalStateException("없는 유저입니다.")
+        );
+        return new SessionUser(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getPassword()
+        );
     }
 }
