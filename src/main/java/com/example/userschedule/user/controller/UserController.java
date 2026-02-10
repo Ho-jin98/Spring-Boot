@@ -8,9 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 public class UserController {
@@ -27,6 +25,17 @@ public class UserController {
         SessionUser sessionUser = userService.login(request);
         session.setAttribute("loginUser", sessionUser);
         return ResponseEntity.status(HttpStatus.OK).build();
+    }
+    //TODO 로그 아웃
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(
+            @SessionAttribute(name = "loginUser", required = false) SessionUser sessionUser, HttpSession session
+    ){
+        if(sessionUser == null){
+            return ResponseEntity.badRequest().build();
+        }
+        session.invalidate();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @GetMapping("/users")
