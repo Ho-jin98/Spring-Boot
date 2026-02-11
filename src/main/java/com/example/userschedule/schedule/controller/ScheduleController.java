@@ -20,7 +20,8 @@ public class ScheduleController {
     public ResponseEntity<CommonResponse<CreateScheduleResponse>> createSchedule(
             @PathVariable Long userId,
             @Valid @RequestBody CreateScheduleRequest request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(CommonResponse.success(HttpStatus.CREATED, "일정 생성 성공",
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.success(HttpStatus.CREATED, "일정 생성 성공",
                 scheduleService.save(userId, request)));
     }
 
@@ -42,14 +43,16 @@ public class ScheduleController {
 
     @PutMapping("/users/{userId}/schedules/{scheduleId}")
     public ResponseEntity<CommonResponse<UpdateScheduleResponse>> updateSchedule(
-            @PathVariable Long scheduleId, @Valid @RequestBody UpdateScheduleRequest request) {
+            @PathVariable Long userId, @PathVariable Long scheduleId, @Valid @RequestBody UpdateScheduleRequest request) {
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "변경 완료",
-                scheduleService.update(scheduleId, request)));
+                scheduleService.update(scheduleId, userId,request)));
     }
 
     @DeleteMapping("/users/{userId}/schedules/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
-        scheduleService.delete(scheduleId);
+    public ResponseEntity<Void> deleteSchedule(
+            @PathVariable Long userId,
+            @PathVariable Long scheduleId) {
+        scheduleService.delete(userId, scheduleId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

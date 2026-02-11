@@ -1,5 +1,6 @@
 package com.example.userschedule.schedule.service;
 
+import com.example.userschedule.exception.ForbiddenException;
 import com.example.userschedule.exception.ScheduleNotFoundException;
 import com.example.userschedule.exception.UserNotFoundException;
 import com.example.userschedule.schedule.dto.*;
@@ -71,10 +72,13 @@ public class ScheduleService {
     }
 
     @Transactional
-    public UpdateScheduleResponse update(Long scheduleId, UpdateScheduleRequest request){
+    public UpdateScheduleResponse update(Long userId, Long scheduleId, UpdateScheduleRequest request){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new ScheduleNotFoundException("수정할 일정이 없습니다.")
         );
+        if(!schedule.getUser().getId().equals(userId)){
+            throw new ForbiddenException("업데이트 권한이 없습니다.");
+        }
         schedule.update(request.getWriter(), request.getTitle(), request.getContent());
         return new UpdateScheduleResponse(
                 schedule.getId(),
@@ -87,11 +91,17 @@ public class ScheduleService {
     }
 
     @Transactional
-    public void delete(Long scheduleId){
-        boolean existence = scheduleRepository.existsById(scheduleId);
-        if(!existence){
-            throw new ScheduleNotFoundException("삭제할 일정이 없습니다.");
+    public void delete(Long userId, Long scheduleId){
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
+                () -> new ScheduleNotFoundException("없는 일정입니다.")
+        );
+        if(schedule.isDeleted()){
+            throw new ScheduleNotFoundException("이미 삭제된 일정입니다.");
         }
-        scheduleRepository.deleteById(scheduleId);
+
+        if(!schedule.getUser().getId().equals(userId)){
+            throw new ForbiddenException("삭제 권한이 없습니다.");
+        }
+        schedule.deleted(true);
     }
 }

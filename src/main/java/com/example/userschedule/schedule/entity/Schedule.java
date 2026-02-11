@@ -19,6 +19,7 @@ public class Schedule extends BaseTimeEntity{
     private String content;
     private boolean isDeleted;
 
+
     //TODO @ManyToOne >> N:1관계로, 다수 -> 단일을 참조하는 관계이다.
     // 이 어노테이션이 붙은 쪽이 연관관계의 "주인"
     // 여기서 주인은 "권력"의 의미가 아니라 "책임"의 의미이다!, 즉 주인의 표현은 "누가 더 중요한가?"가 아니라,
@@ -41,10 +42,7 @@ public class Schedule extends BaseTimeEntity{
         this.title = title;
         this.content = content;
     }
-
     public void deleted(boolean isDeleted){
         this.isDeleted = isDeleted;
     }
-
-
 }
