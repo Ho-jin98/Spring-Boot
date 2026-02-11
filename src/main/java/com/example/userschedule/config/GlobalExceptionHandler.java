@@ -43,6 +43,4 @@ public class GlobalExceptionHandler {
     // 처리해준다고 생각하고, 나머지 exception 패키지에서 커스텀 에러를 만들어서 사용하는 부분은 Service에서 발생하는
     // 에러들을 처리해준다고 생각하면 그나마 이해하기 편한것 같다.
 
-
-
 }

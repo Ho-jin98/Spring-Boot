@@ -1,5 +1,6 @@
 package com.example.userschedule.user.controller;
 
+import com.example.userschedule.config.PasswordEncoder;
 import com.example.userschedule.user.dto.*;
 import com.example.userschedule.user.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -12,7 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
-    private  final UserService userService;
+    private final UserService userService;
 
     //TODO 회원가입, 유저 등록 = 회원가입이니까!
     @PostMapping("/signup")
