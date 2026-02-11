@@ -21,12 +21,15 @@ public class CommentController {
             @PathVariable Long userId,
             @PathVariable Long scheduleId,
             @Valid @RequestBody CreateCommentRequest request){
-        return ResponseEntity.status(HttpStatus.CREATED).body(CommonResponse.success(HttpStatus.CREATED, "댓글 생성 성공",
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(CommonResponse.success(HttpStatus.CREATED, "댓글 생성 성공",
                 commentService.save(userId,scheduleId,request)));
     }
 
     @GetMapping("/users/{userId}/schedules/{scheduleId}/comments/{commentId}")
-    public ResponseEntity<CommonResponse<GetCommentResponse>> getComment(@PathVariable Long scheduleId, @PathVariable Long commentId){
+    public ResponseEntity<CommonResponse<GetCommentResponse>> getComment(
+            @PathVariable Long scheduleId,
+            @PathVariable Long commentId){
         return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "조회 성공",
                 commentService.getComment(scheduleId, commentId)));
     }
@@ -34,7 +37,8 @@ public class CommentController {
     @GetMapping("/users/{userId}/schedules/{scheduleId}/comments")
     public ResponseEntity<CommonResponse<List<GetCommentResponse>>> getComments(
             @PathVariable Long scheduleId){
-        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "조회 성공",
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.success(HttpStatus.OK, "조회 성공",
                 commentService.getComments(scheduleId)));
     }
 
@@ -44,13 +48,16 @@ public class CommentController {
             @PathVariable Long userId,
             @PathVariable Long scheduleId,
             @Valid @RequestBody UpdateCommentRequest request) {
-        return ResponseEntity.status(HttpStatus.OK).body(CommonResponse.success(HttpStatus.OK, "변경 완료",
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(CommonResponse.success(HttpStatus.OK, "변경 완료",
                 commentService.update(commentId, userId, scheduleId, request)));
     }
 
     @DeleteMapping("/users/{userId}/schedules/{scheduleId}/comments/{commentId}")
     public ResponseEntity<Void> deleteComment (
-            @PathVariable Long commentId, @PathVariable Long userId, @PathVariable Long scheduleId){
+            @PathVariable Long commentId,
+            @PathVariable Long userId,
+            @PathVariable Long scheduleId){
         commentService.delete(commentId, userId, scheduleId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
