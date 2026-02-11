@@ -39,6 +39,10 @@ public class GlobalExceptionHandler {
     // Collectors.joining(", ") -> 최종 연산(합체)단계, 여러개의 문자열 메세지를 다시 하나로 모아주는데,
     // 이 때 "," 쉽표를 구분자로 사용해서 이어붙인다. 공백을 추가해줘서 읽기 편하게 해주면 좋다.
 
+    //TODO CommonResponse DTO를 이용하여 GlobalExceptionHandler를 만드는 것은, Controller 에서의 발생하는 에러를
+    // 처리해준다고 생각하고, 나머지 exception 패키지에서 커스텀 에러를 만들어서 사용하는 부분은 Service에서 발생하는
+    // 에러들을 처리해준다고 생각하면 그나마 이해하기 편한것 같다.
+
 
 
 }
