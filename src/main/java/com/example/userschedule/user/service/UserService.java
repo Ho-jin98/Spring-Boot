@@ -85,6 +85,8 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    //TODO @Valid >> 요청받은 로그인 정보와 일치하는지 검증
+    // 현재 요청DTO에는 email, password가 있음.
     public SessionUser login(@Valid LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
                 () -> new UserNotFoundException("없는 유저입니다.")
