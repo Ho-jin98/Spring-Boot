@@ -1,4 +1,6 @@
 package com.example.userschedule.user.service;
+import com.example.userschedule.exception.EmailNotFoundException;
+import com.example.userschedule.exception.PasswordDoesNotMatch;
 import com.example.userschedule.exception.UserNotFoundException;
 import com.example.userschedule.user.dto.*;
 import com.example.userschedule.user.entity.User;
@@ -49,7 +51,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetUserResponse getUser(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("없는 유저입니다.")
+                () -> new UserNotFoundException("존재하지 않는 유저입니다.")
         );
         return new GetUserResponse(
                 user.getId(),
@@ -63,7 +65,7 @@ public class UserService {
     @Transactional
     public UpdateUserResponse update(Long userId, UpdateUserRequest request){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("없는 유저입니다.")
+                () -> new UserNotFoundException("존재하지 않는 유저입니다.")
         );
         user.update(request.getUsername());
         return new UpdateUserResponse(
@@ -79,7 +81,7 @@ public class UserService {
     public void delete(Long userId){
         boolean existence = userRepository.existsById(userId);
         if (!existence){
-            throw new UserNotFoundException("없는 유저입니다.");
+            throw new UserNotFoundException("존재하지 않는 유저입니다.");
         }
         userRepository.deleteById(userId);
     }
@@ -89,12 +91,12 @@ public class UserService {
     // 현재 요청DTO에는 email, password가 있음.
     public SessionUser login(@Valid LoginRequest request) {
         User user = userRepository.findByEmail(request.getEmail()).orElseThrow(
-                () -> new UserNotFoundException("없는 유저입니다.")
+                () -> new EmailNotFoundException("잘못된 이메일 입니다.")
         );
         //TODO 회원가입할 때의 비밀번호와, 요청받은 비밀번호가 일치하는지 확인
         // 하지만 여기까지만 해놓으면 500에러로 표시가되기 때문에 커스텀 에러로 진행
         if(!user.getPassword().equals(request.getPassword())){
-            throw new IllegalStateException("비밀번호가 일치하지 않습니다.");
+            throw new PasswordDoesNotMatch("비밀번호가 일치하지 않습니다.");
         }
         return new SessionUser(
                 user.getId(),
