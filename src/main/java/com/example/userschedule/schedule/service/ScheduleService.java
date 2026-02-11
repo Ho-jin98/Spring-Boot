@@ -7,11 +7,10 @@ import com.example.userschedule.schedule.entity.Schedule;
 import com.example.userschedule.schedule.repository.ScheduleRepository;
 import com.example.userschedule.user.entity.User;
 import com.example.userschedule.user.repository.UserRepository;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
+
 
 import java.util.List;
 
