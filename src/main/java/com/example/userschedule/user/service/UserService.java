@@ -101,8 +101,7 @@ public class UserService {
         return new SessionUser(
                 user.getId(),
                 user.getUsername(),
-                user.getEmail(),
-                user.getPassword()
+                user.getEmail()
         );
     }
 }

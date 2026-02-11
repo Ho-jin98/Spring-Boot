@@ -1,13 +1,17 @@
 package com.example.userschedule.schedule.service;
 
+import com.example.userschedule.exception.ScheduleNotFoundException;
+import com.example.userschedule.exception.UserNotFoundException;
 import com.example.userschedule.schedule.dto.*;
 import com.example.userschedule.schedule.entity.Schedule;
 import com.example.userschedule.schedule.repository.ScheduleRepository;
 import com.example.userschedule.user.entity.User;
 import com.example.userschedule.user.repository.UserRepository;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.util.List;
 
@@ -18,9 +22,9 @@ public class ScheduleService {
     private final UserRepository userRepository;
 
     @Transactional
-    public CreateScheduleResponse save(Long userId,CreateScheduleRequest request){
+    public CreateScheduleResponse save(Long userId, CreateScheduleRequest request){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
+                () -> new UserNotFoundException("존재하지 않는 유저입니다.")
         );
 
         Schedule schedule = new Schedule(request.getWriter(),request.getTitle(),request.getContent(), user);
@@ -38,7 +42,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public GetScheduleResponse getSchedule(Long scheduleId){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalStateException("없는 일정입니다.")
+                () -> new ScheduleNotFoundException("조회되는 일정이 없습니다.")
         );
         return new GetScheduleResponse(
                 schedule.getId(),
@@ -53,7 +57,7 @@ public class ScheduleService {
     @Transactional(readOnly = true)
     public List<GetScheduleResponse> getSchedules(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("없는 유저입니다.")
+                () -> new UserNotFoundException("존재하지 않는 유저입니다.")
         );
         List <Schedule> schedules = scheduleRepository.findByUser(user);
         return schedules.stream()
@@ -70,7 +74,7 @@ public class ScheduleService {
     @Transactional
     public UpdateScheduleResponse update(Long scheduleId, UpdateScheduleRequest request){
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new IllegalStateException("없는 일정입니다.")
+                () -> new ScheduleNotFoundException("수정할 일정이 없습니다.")
         );
         schedule.update(request.getWriter(), request.getTitle(), request.getContent());
         return new UpdateScheduleResponse(
@@ -87,7 +91,7 @@ public class ScheduleService {
     public void delete(Long scheduleId){
         boolean existence = scheduleRepository.existsById(scheduleId);
         if(!existence){
-            throw new IllegalStateException("없는 일정입니다.");
+            throw new ScheduleNotFoundException("삭제할 일정이 없습니다.");
         }
         scheduleRepository.deleteById(scheduleId);
     }
