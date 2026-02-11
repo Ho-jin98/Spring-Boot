@@ -110,6 +110,11 @@ public class CommentService {
         if(!comment.getSchedule().getId().equals(scheduleId)) {
             throw new ScheduleNotFoundException("해당 일정의 댓글이 아닙니다.");
         }
-        commentRepository.deleteById(commentId);
+        //TODO commentRepository.delete(comment); << 이렇게 사용하면 DB에서 완전히 삭제시키는것이므로,
+        // 나중에 복구하고 싶어도 불가능,
+        comment.deleted(true);
+        //TODO 현재 Comment 엔티티에 isDelet = false 필드를 두고, deleted 메서드를 만들었으므로,
+        // deleted 메서드를 호출하여 지우게되면 DB에는 정보가 남아있는데 isDeleted가 true가 됨
+        // 나중에 복구가 가능하고, 삭제되었다고 메세지로 전달해주면된다.
     }
 }
