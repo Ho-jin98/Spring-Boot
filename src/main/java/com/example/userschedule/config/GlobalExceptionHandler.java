@@ -1,6 +1,5 @@
 package com.example.userschedule.config;
 import com.example.userschedule.common.CommonResponse;
-import com.example.userschedule.exception.CommentNotFoundException;
 import com.example.userschedule.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
