@@ -8,6 +8,7 @@ import lombok.Getter;
 public class LoginRequest {
     @Email
     private String email;
+
     @Size(min = 8, max = 20)
     private String password;
 }
