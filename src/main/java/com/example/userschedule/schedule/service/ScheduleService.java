@@ -1,5 +1,8 @@
 package com.example.userschedule.schedule.service;
 
+import com.example.userschedule.comment.entity.Comment;
+import com.example.userschedule.comment.repository.CommentRepository;
+import com.example.userschedule.exception.CommentNotFoundException;
 import com.example.userschedule.exception.ForbiddenException;
 import com.example.userschedule.exception.ScheduleNotFoundException;
 import com.example.userschedule.exception.UserNotFoundException;
@@ -20,6 +23,7 @@ import java.util.List;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional
     public CreateScheduleResponse save(Long userId, CreateScheduleRequest request){
@@ -59,7 +63,7 @@ public class ScheduleService {
         User user = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFoundException("존재하지 않는 유저입니다.")
         );
-        List <Schedule> schedules = scheduleRepository.findByUser(user);
+        List <Schedule> schedules = scheduleRepository.findByUserAndIsDeletedFalse(user);
         return schedules.stream()
                 .map(schedule -> new GetScheduleResponse(
                         schedule.getId(),
@@ -92,16 +96,13 @@ public class ScheduleService {
 
     @Transactional
     public void delete(Long userId, Long scheduleId){
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new ScheduleNotFoundException("없는 일정입니다.")
-        );
-        if(schedule.isDeleted()){
-            throw new ScheduleNotFoundException("이미 삭제된 일정입니다.");
-        }
-
+        Schedule schedule = scheduleRepository.findByIdAndIsDeletedFalse(scheduleId);
         if(!schedule.getUser().getId().equals(userId)){
             throw new ForbiddenException("삭제 권한이 없습니다.");
         }
+        commentRepository.deleteAllByScheduleId(scheduleId);
+
         schedule.deleted(true);
+//        scheduleRepository.deleteById(scheduleId);
     }
 }

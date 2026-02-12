@@ -1,5 +1,5 @@
 package com.example.userschedule.user.service;
-import com.example.userschedule.config.PasswordEncoder;
+import com.example.userschedule.utll.PasswordEncoder;
 import com.example.userschedule.exception.EmailNotFoundException;
 import com.example.userschedule.exception.PasswordDoesNotMatch;
 import com.example.userschedule.exception.UserNotFoundException;

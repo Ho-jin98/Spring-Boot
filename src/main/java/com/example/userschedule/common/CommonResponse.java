@@ -21,7 +21,6 @@ public class CommonResponse<T>{
 //        this.message = message;
 //        this.data = null;
 //    }
-
     //TODO static 메서드에서 제네릭을 사용할 때는 static <T> 으로 명시를 해줘야됨.
     // 제네릭을 사용한다고 알려준다고 생각하면 될 것 같다.
 

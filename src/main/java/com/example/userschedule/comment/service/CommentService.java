@@ -22,9 +22,9 @@ import java.util.List;
 @RequiredArgsConstructor
 
 public class CommentService {
-    private CommentRepository commentRepository;
-    private UserRepository userRepository;
-    private ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
 
     @Transactional
     public CreateCommentResponse save(Long userId, Long scheduleId, @Valid CreateCommentRequest request) {
@@ -69,6 +69,11 @@ public class CommentService {
                 () -> new ScheduleNotFoundException("없는 일정입니다.")
         );
         List<Comment> comments = commentRepository.findAllByScheduleIdAndIsDeletedFalse(scheduleId);
+
+        if(comments.isEmpty()){
+            throw new CommentNotFoundException("댓글이 존재하지 않습니다.");
+        }
+
         return comments.stream()
                 .map(comment -> new GetCommentResponse(
                         comment.getId(),

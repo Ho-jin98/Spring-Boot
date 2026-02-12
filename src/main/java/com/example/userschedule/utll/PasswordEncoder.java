@@ -1,4 +1,4 @@
-package com.example.userschedule.config;
+package com.example.userschedule.utll;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import lombok.Getter;

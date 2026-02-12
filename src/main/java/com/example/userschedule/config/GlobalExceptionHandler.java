@@ -1,5 +1,6 @@
 package com.example.userschedule.config;
 import com.example.userschedule.common.CommonResponse;
+import com.example.userschedule.exception.CommentNotFoundException;
 import com.example.userschedule.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,8 +15,10 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ServiceException.class)
-    public ResponseEntity<String> handleServiceException(ServiceException ex) {
-        return ResponseEntity.status(ex.getStatus()).body(ex.getMessage());
+    public ResponseEntity<CommonResponse> handleServiceException(ServiceException ex) {
+        String errorMessage = ex.getMessage();
+        return ResponseEntity.status(ex.getStatus())
+                .body(CommonResponse.fail(ex.getStatus(),errorMessage));
     }
     //TODO Controller에서 @Valid 검증이 실패하면 MethodArgumentNotValidException 발생
     @ExceptionHandler(MethodArgumentNotValidException.class)
