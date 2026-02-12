@@ -18,15 +18,12 @@ public class User extends BaseTimeEntity {
     private String email;
     private String password;
 
-
     public User(String username, String email,  String password) {
         this.username = username;
         this.email = email;
         this.password = password;
     }
-
     public void update(String username) {
         this.username = username;
     }
-
 }

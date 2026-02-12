@@ -41,7 +41,7 @@ public class UserService {
     //TODO @Valid >> 요청받은 로그인 정보와 일치하는지 검증
     // 현재 요청DTO에는 email, password가 있음.
 
-    @Transactional(readOnly = true)
+    @Transactional
     public SessionUser login(@Valid LoginRequest request) {
         //TODO 먼저 userRepository에서 요청을 보낸 Email이 맞는지 확인해서 찾아와줌,
         // 없으면 에러를 던져준다.
