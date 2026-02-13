@@ -12,34 +12,34 @@
 ## 📑 API 명세 (Key Endpoints)
 
 ### 1. 유저 관련 (User)
-| 기능 | 메서드 | 엔드포인트 | 상세 보기 |
-| :--- | :---: | :--- | :---: |
-| 회원가입 | `POST` | `/users/signup` | [클릭](#1-1-회원가입) |
-| 로그인 | `POST` | `/users/login` | [클릭](#1-2-로그인) |
-| 로그아웃 | `POST` | `/users/logout` | [클릭](#1-3-로그아웃) |
-| 유저 단건 조회 | `GET` | `/users/{userId}` | [클릭](#1-4-유저-단건-조회) |
+| 기능 | 메서드 | 엔드포인트 |
+| :--- | :---: | :--- | 
+| 회원가입 | `POST` | `/users/signup` |
+| 로그인 | `POST` | `/users/login` | 
+| 로그아웃 | `POST` | `/users/logout` |
+| 유저 단건 조회 | `GET` | `/users/{userId}` |
 | 유저 전체 목록 | `GET` | `/users` | - |
 | 유저 정보 수정 | `PUT` | `/users/{userId}` | - |
 | 회원 탈퇴 | `DELETE` | `/users/{userId}` | - |
 
 
 ### 2. 일정 관련 (Schedule)
-| 기능 | 메서드 | 엔드포인트 | 상세 보기 |
-| :--- | :---: | :--- | :---: |
-| 일정 생성 | `POST` | `/users/{userId}schedules` | [클릭](#2-1-일정-생성) |
-| 일정 상세 조회 | `GET` | `/users/{userId}/schedules/{scheduleId}` | [클릭](#2-2-일정-상세-조회) |
+| 기능 | 메서드 | 엔드포인트 |
+| :--- | :---: | :--- | 
+| 일정 생성 | `POST` | `/users/{userId}schedules` |
+| 일정 상세 조회 | `GET` | `/users/{userId}/schedules/{scheduleId}` |
 | 일정 전체 목록 | `GET` | `/users/{userId}/schedules` | - |
 | 일정 수정 | `PUT` | `/users/{userId}/schedules/{scheduleId}` | - |
 | 일정 삭제 | `DELETE` | `/users/{userId}/schedules/{scheduleId}` | - |
 
 ### 3. 댓글 관련 (Comment)
-| 기능 | 메서드 | 엔드포인트 | 상세 보기 |
-| :--- | :---: | :--- | :---: |
-| 댓글 작성 | `POST` | `/users/{userId}/schedules/{scheduleId}/comments` | [클릭](#3-1-댓글-작성) |
-| 댓글 상세 조회 | `GET` | `/users/{userId}/schedules/{scheduleId}/comments/{commentId}` | - |
-| 댓글 전체 목록 | `GET` | `/users/{userId}/schedules/{scheduleId}/comments` | - |
-| 댓글 수정 | `PUT` | `/users/{userId}/schedules/{scheduleId}/comments/{commentId}` | - |
-| 댓글 삭제 | `DELETE` | `/users/{userId}/schedules/{scheduleId}/comments/{commentId}` | - |
+| 기능 | 메서드 | 엔드포인트 | 
+| :--- | :---: | :--- | 
+| 댓글 작성 | `POST` | `/users/{userId}/schedules/{scheduleId}/comments` | 
+| 댓글 상세 조회 | `GET` | `/users/{userId}/schedules/{scheduleId}/comments/{commentId}` | 
+| 댓글 전체 목록 | `GET` | `/users/{userId}/schedules/{scheduleId}/comments` | 
+| 댓글 수정 | `PUT` | `/users/{userId}/schedules/{scheduleId}/comments/{commentId}` | 
+| 댓글 삭제 | `DELETE` | `/users/{userId}/schedules/{scheduleId}/comments/{commentId}` | 
 ## 📖 API Documentation
 상세한 API 사용법과 파라미터 정보는 아래 포스트맨 문서에서 확인하실 수 있습니다.
 
