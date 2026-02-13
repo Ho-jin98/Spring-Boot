@@ -1,7 +1,6 @@
 package com.example.userschedule.comment.dto;
 
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 

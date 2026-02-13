@@ -1,9 +1,7 @@
 package com.example.userschedule.user.repository;
 
-import com.example.userschedule.schedule.entity.Schedule;
 import com.example.userschedule.user.entity.User;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

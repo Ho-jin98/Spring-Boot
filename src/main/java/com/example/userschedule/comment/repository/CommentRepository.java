@@ -1,11 +1,8 @@
 package com.example.userschedule.comment.repository;
 
 import com.example.userschedule.comment.entity.Comment;
-import com.example.userschedule.schedule.entity.Schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
-import java.util.Optional;
 //TODO ORM(Object-Relational Mapping) > 자바언어를 적은 것들을 쿼리로 자동으로 변경해줌
 // 대표적인 ORM이 JPA
 public interface CommentRepository extends JpaRepository<Comment, Long> {

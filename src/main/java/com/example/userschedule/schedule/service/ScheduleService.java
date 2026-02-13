@@ -1,8 +1,5 @@
 package com.example.userschedule.schedule.service;
-
-import com.example.userschedule.comment.entity.Comment;
 import com.example.userschedule.comment.repository.CommentRepository;
-import com.example.userschedule.exception.CommentNotFoundException;
 import com.example.userschedule.exception.ForbiddenException;
 import com.example.userschedule.exception.ScheduleNotFoundException;
 import com.example.userschedule.exception.UserNotFoundException;
