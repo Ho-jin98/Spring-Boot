@@ -162,7 +162,7 @@ dependencies {
 ---
 
 <p align="center">
-  <img width=""500 height="500" alt="Image" src="https://github.com/user-attachments/assets/2ccf6c48-0868-4838-be99-be8b4b914d8a" />
+  <img width=""300 height="300" alt="Image" src="https://github.com/user-attachments/assets/2ccf6c48-0868-4838-be99-be8b4b914d8a" />
   <br>
   <em> 🙏 바쁘신 와중에 세세히 봐주셔서 감사합니다! </em>
 </p>
