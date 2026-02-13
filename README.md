@@ -45,7 +45,6 @@
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/51186116/2sBXcBmh8b)
 
-> **Tip:** 위 버튼을 클릭하면 브라우저에서 명세서를 확인하거나, 본인의 포스트맨으로 컬렉션을 가져올 수 있습니다.
 
 ---
 
