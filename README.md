@@ -43,7 +43,7 @@
 ## 📖 API Documentation
 상세한 API 사용법과 파라미터 정보는 아래 포스트맨 문서에서 확인하실 수 있습니다.
 
-[![Run in Postman](https://run.pstmn.io/button.svg)](https://hojin98-6454949.postman.co/workspace/%ED%98%B8%EC%A7%84's-Workspace~d769eb0d-adea-4afb-86cf-fbe5bc75fb85/collection/51186116-e000aa82-1fdb-41e4-85ce-f2ce42ca8603?action=share&creator=51186116)
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://documenter.getpostman.com/view/51186116/2sBXcBmh8b)
 
 > **Tip:** 위 버튼을 클릭하면 브라우저에서 명세서를 확인하거나, 본인의 포스트맨으로 컬렉션을 가져올 수 있습니다.
 
