@@ -22,13 +22,19 @@ public class GlobalExceptionHandler {
     //TODO Controller에서 @Valid 검증이 실패하면 MethodArgumentNotValidException 발생
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<CommonResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        //TODO
         String errorMessage = ex.getBindingResult().getFieldErrors().stream()
                 .map(FieldError::getDefaultMessage)
                 .collect(Collectors.joining(", "));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(CommonResponse.fail(HttpStatus.BAD_REQUEST, errorMessage));
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<CommonResponse> handleException(Exception ex) {
+        String errorMessage = ex.getMessage();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(CommonResponse.fail(HttpStatus.INTERNAL_SERVER_ERROR,errorMessage));
     }
 
     //TODO getBindingResult() > 에러를 가져온다.

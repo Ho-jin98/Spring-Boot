@@ -28,6 +28,11 @@ public class CommonResponse<T>{
     public static <T> CommonResponse<T> success(HttpStatus status, String message, T data){
         return new CommonResponse<>(status, message, data);
     }
+
+    public static<T> CommonResponse<T> success(HttpStatus status, String message){
+        return new CommonResponse<>(status, message, null);
+    }
+
     //TODO 실패했을 때 new CommonResponse<>(status, message, null) 이 객체를 리턴해줌,
     // 실패했을 때는 돌려줄 데이터, 즉 body가 필요없으므로, data는 null
     public static <T> CommonResponse<T> fail(HttpStatus status, String message){
