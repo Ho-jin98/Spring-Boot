@@ -57,9 +57,9 @@ User : Schedule = 1 : N (@ManyToOne)
 
 User : Comment = 1 : N (@ManyToOne)
 
-Schedule : Comment = 1 : N (양방향 연관관계)
+Comment : Schedule = M : N (@ManyToOne + @OneToMany)
 
-**일정 삭제 시 관련 댓글이 함께 관리되도록 영속성 전이(Cascade) 적용.**
+**일정 삭제 시 관련 댓글이 함께 관리되도록 영속성 전이(Cascade), 고아제거(orphanRemoval) 적용.**
 
 
 <p align="center">
@@ -162,7 +162,7 @@ dependencies {
 ---
 
 <p align="center">
-  <img width=""500 height="500" alt="Image" src="https://github.com/user-attachments/assets/2ccf6c48-0868-4838-be99-be8b4b914d8a" />
+  <img width=""400 height="400" alt="Image" src="https://github.com/user-attachments/assets/2ccf6c48-0868-4838-be99-be8b4b914d8a" />
   <br>
   <em> 🙏 바쁘신 와중에 세세히 봐주셔서 감사합니다! </em>
 </p>
