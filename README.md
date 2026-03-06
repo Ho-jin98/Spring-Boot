@@ -341,11 +341,11 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
 
 **3-1. 회고**
 
-처음에는 단순히 중복 코드를 제거하는 것이 목표였지만, 이 과정에서 Filter와 Interceptor의 역할 차이를 이해하게 되었습니다.
 
 - **Filter**: 보안 레이어 → 인증/인가 담당
 - **Interceptor**: 비즈니스 레이어 → 전처리/후처리 담당
 
+처음에는 단순히 중복 코드를 제거하는 것이 목표였지만, 이 과정에서 Filter와 Interceptor의 역할 차이를 이해하게 되었습니다.
 단순히 코드를 줄이는 것보다 **각 클래스가 단일 책임을 갖도록 설계하는 것**이 더 중요하다는 것을 배웠습니다.
 
 **3-2. 전후 데이터 비교**
