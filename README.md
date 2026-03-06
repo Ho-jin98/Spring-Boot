@@ -352,9 +352,9 @@ public boolean preHandle(HttpServletRequest request, HttpServletResponse respons
 
 | | Before | After |
 |---|---|---|
-| JwtFilter | 인증 + 인가 | 인증 + 인가 ✅ |
-| AdminApiLoggingInterceptor | 인가 + 로깅 (역할 혼재) | 로깅만 담당 ✅ |
-| 권한 체크 위치 | Filter + Interceptor (중복) | Filter만 (단일) ✅ |
+| JwtFilter | 인증 + 인가 | 인증 + 인가  |
+| AdminApiLoggingInterceptor | 인가 + 로깅 (역할 혼재) | 로깅만 담당  |
+| 권한 체크 위치 | Filter + Interceptor (중복) | Filter만 (단일) |
 
 ---
 
