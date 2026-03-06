@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface TodoRepository extends JpaRepository<Todo, Long> {
 
-    @EntityGraph(attributePaths = {"user"} )
+    @EntityGraph(attributePaths = {"user"})
     @Query("SELECT t FROM Todo t ORDER BY t.modifiedAt DESC")
     Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
 

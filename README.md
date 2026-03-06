@@ -3,7 +3,7 @@
 ## 📌 프로젝트 소개
 
 이미 완성된 Spring Boot 프로젝트를 분석하여 에러를 수정하고, 동작하지 않는 메서드를 개선하며, 코드 품질을 향상시키는 과제입니다.
-도전 과제로는 어드민 API 접근 로깅을 위한 Interceptor를 직접 구현했습니다.
+도전 과제로는 어드민 API 접근 로깅을 위한 Interceptor를 구현했습니다.
 
 ---
 
@@ -26,14 +26,27 @@
 `AuthUserArgumentResolver`의 로직이 동작하지 않는 상태
 
 **해결 방법**
-- `supportsParameter()`: `@Auth` 어노테이션과 `AuthUser` 타입이 함께 사용되었는지 검증
-- `resolveArgument()`: JwtFilter에서 request에 저장해둔 `userId`, `email`, `userRole` 값을 꺼내 `AuthUser` 객체로 변환 후 반환
 - `@Component`로 Bean 등록 후 `WebMvcConfig`에서 Spring MVC와 연결
+```java
+@Component
+public class AuthUserArgumentResolver implements HandlerMethodArgumentResolver {
+    ...
+}
+```
 
 ```java
-@Override
-public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-    resolvers.add(authUserArgumentResolver);
+@Configuration
+@RequiredArgsConstructor
+
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final AuthUserArgumentResolver authUserArgumentResolver;
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(authUserArgumentResolver);
+    }
+    ...
 }
 ```
 
@@ -104,11 +117,12 @@ if (weatherArray == null || weatherArray.length == 0) {
 
 ```java
 @NotBlank
-@Length(min = 8, message = "새 비밀번호는 8자 이상이어야 합니다.")
-@Pattern(
-    regexp = "^(?=.*\\d)(?=.*[A-Z]).+$",
-    message = "숫자와 대문자를 포함해야 합니다."
-)
+private String oldPassword;
+
+@NotBlank
+@Length(min = 8, message = "새 비밀번호는 8자 이상입니다.")
+@Pattern(regexp = "^(?=.*\\d)(?=.*[A-Z]).+$"
+        ,message = "숫자와 대문자를 포함해야 합니다.")
 private String newPassword;
 ```
 
@@ -133,8 +147,8 @@ Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
 
 // After
 @EntityGraph(attributePaths = {"user"})
-@Query("SELECT t FROM Todo t ORDER BY t.modifiedAt DESC")
-Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
+    @Query("SELECT t FROM Todo t ORDER BY t.modifiedAt DESC")
+    Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
 ```
 
 **@EntityGraph 사용 시 주의점**
@@ -164,9 +178,12 @@ Page<Todo> findAllByOrderByModifiedAtDesc(Pageable pageable);
 ```java
 // Before
 if (!ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
-
+throw new InvalidRequestException("일정을 생성한 유저만 담당자를 지정할 수 있습니다.");
+}
 // After
 if (todo.getUser() == null || !ObjectUtils.nullSafeEquals(user.getId(), todo.getUser().getId())) {
+throw new InvalidRequestException("일정을 생성한 유저만 담당자를 지정할 수 있습니다.");
+}
 ```
 
 ---
@@ -202,29 +219,40 @@ public class AdminApiLoggingInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
             throws IOException {
-
+        // request에서 JwtFilter에 저장해둔 userRole 꺼내기
         String userRole = (String) request.getAttribute("userRole");
 
+        // Admin 권한 확인
         if (!"ADMIN".equals(userRole)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Admin 권한이 없습니다.");
             return false;
         }
 
+        // 로깅 (요청 시각 + URL)
         log.info("ADMIN API 요청 - 시각: {}, URL: {}",
                 LocalDateTime.now(),
                 request.getRequestURI());
 
-        return true;
+        return true; // 통과
     }
 }
 ```
 
 **WebMvcConfig 등록**
 ```java
-@Override
-public void addInterceptors(InterceptorRegistry registry) {
-    registry.addInterceptor(adminApiLoggingInterceptor)
-            .addPathPatterns("/admin/**");
+@Configuration
+@RequiredArgsConstructor
+
+public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final AdminApiLoggingInterceptor adminApiLoggingInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry){
+        registry.addInterceptor(adminApiLoggingInterceptor)
+                .addPathPatterns("/admin/**"); // CommentAdminController & UserAdminController
+    }
+
 }
 ```
 
