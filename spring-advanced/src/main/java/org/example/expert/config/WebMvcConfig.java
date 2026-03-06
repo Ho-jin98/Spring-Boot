@@ -28,7 +28,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/admin/**"); // CommentAdminController & UserAdminController
     }
 
-
-
-
 }
