@@ -259,3 +259,113 @@ public class WebMvcConfig implements WebMvcConfigurer {
 **적용 대상**
 - `DELETE /admin/comments/{commentId}` - `CommentAdminController.deleteComment()`
 - `PATCH /admin/users/{userId}` - `UserAdminController.changeUserRole()`
+
+---
+
+
+### Lv 6. 내가 정의한 문제와 해결 과정
+
+#### 1. 문제 인식 및 정의
+
+`JwtFilter`와 `AdminApiLoggingInterceptor`에서 ADMIN 권한을 체크하는 로직이 **중복**으로 존재하는 것을 발견했습니다.
+
+```java
+// JwtFilter - ADMIN 권한 체크
+if (url.startsWith("/admin") && !UserRole.ADMIN.equals(userRole)) {
+log.warn("권한 부족: userId={}, role={}, URI={}", claims.getSubject(), userRole, url);
+sendErrorResponse(httpResponse, HttpStatus.FORBIDDEN, "접근 권한이 없습니다.");
+return;
+}
+
+// AdminApiLoggingInterceptor - 또 ADMIN 권한 체크 (중복!)
+
+if (!"ADMIN".equals(userRole)) {
+response.sendError(HttpServletResponse.SC_FORBIDDEN, "Admin 권한이 없습니다.");
+return false;
+}
+```
+
+#### 2. 해결 방안
+
+**2-1. 의사결정 과정**
+
+| 방안 | 설명 | 장점 | 단점 |
+|---|---|---|---|
+| A. 현재 구조 유지 | Filter가 인가, Interceptor가 로깅 | 역할이 명확히 분리됨 | 권한 체크 중복 존재 |
+| B. Interceptor로 권한 체크 이동 | Filter에서 권한 체크 제거 | 중복 제거 | Filter/Interceptor 역할 혼재 |
+
+일반적으로 **인증/인가는 Filter의 역할**이라고 생각을 했습니다. Spring Security도 Filter 기반으로 인증/인가를 처리하며, Interceptor는 비즈니스 로직의 전처리를 담당하는 것이 자연스럽다고 생각합니다.
+
+따라서 **방안 A를 선택**하여 Filter는 인가, Interceptor는 로깅이라는 단일 책임을 갖도록 유지하고, Interceptor의 중복된 권한 체크 로직을 제거하는 방향으로 결정했습니다.
+
+**2-2. 해결 과정**
+
+`AdminApiLoggingInterceptor`에서 중복된 권한 체크 로직을 제거하고 로깅만 담당하도록 수정했습니다.
+
+```java
+// Before - 권한 체크 + 로깅 (역할 혼재)
+@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+        throws IOException {
+           // request에서 JwtFilter에 저장해둔 userRole 꺼내기
+        String userRole = (String) request.getAttribute("userRole");
+
+           // Admin 권한 확인
+        if (!"ADMIN".equals(userRole)) {
+            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Admin 권한이 없습니다.");
+            return false;
+        } 
+
+    // 로깅 (요청 시각 + URL)
+    log.info("ADMIN API 요청 - 시각: {}, URL: {}",
+            LocalDateTime.now(),
+            request.getRequestURI());
+
+    return true; // 통과
+}
+
+// After - 로깅만 담당 (단일 책임)
+@Override
+public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
+        throws IOException {
+    // 로깅 (요청 시각 + URL)
+    log.info("ADMIN API 요청 - 시각: {}, URL: {}",
+            LocalDateTime.now(),
+            request.getRequestURI());
+
+    return true; // 통과
+}
+```
+
+#### 3. 해결 완료
+
+**3-1. 회고**
+
+처음에는 단순히 중복 코드를 제거하는 것이 목표였지만, 이 과정에서 Filter와 Interceptor의 역할 차이를 이해하게 되었습니다.
+
+- **Filter**: 보안 레이어 → 인증/인가 담당
+- **Interceptor**: 비즈니스 레이어 → 전처리/후처리 담당
+
+단순히 코드를 줄이는 것보다 **각 클래스가 단일 책임을 갖도록 설계하는 것**이 더 중요하다는 것을 배웠습니다.
+
+**3-2. 전후 데이터 비교**
+
+| | Before | After |
+|---|---|---|
+| JwtFilter | 인증 + 인가 | 인증 + 인가 ✅ |
+| AdminApiLoggingInterceptor | 인가 + 로깅 (역할 혼재) | 로깅만 담당 ✅ |
+| 권한 체크 위치 | Filter + Interceptor (중복) | Filter만 (단일) ✅ |
+
+---
+
+
+<br>
+
+<div align="center">
+
+## 💖 끝까지 봐주셔서 감사합니다!
+
+<img src="./images/thank_you.png" alt="Thank you for watching until the end" width="600">
+
+<br>
+---

@@ -16,14 +16,16 @@ public class AdminApiLoggingInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
         throws IOException {
-        // request에서 JwtFilter에 저장해둔 userRole 꺼내기
+        /* JwtFilter와 권한 체크하는 로직이 중복으로 확인,
+
+           request에서 JwtFilter에 저장해둔 userRole 꺼내기
         String userRole = (String) request.getAttribute("userRole");
 
-        // Admin 권한 확인
+           Admin 권한 확인
         if (!"ADMIN".equals(userRole)) {
             response.sendError(HttpServletResponse.SC_FORBIDDEN, "Admin 권한이 없습니다.");
             return false;
-        }
+        } */
 
         // 로깅 (요청 시각 + URL)
         log.info("ADMIN API 요청 - 시각: {}, URL: {}",
